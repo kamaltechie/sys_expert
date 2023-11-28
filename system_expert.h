@@ -1,17 +1,29 @@
-
+#include <stdio.h>
+#include <stdlib.h>
 #ifndef SYSTEM_EXPERT_SYSTEM_EXPERT_H
 #define SYSTEM_EXPERT_SYSTEM_EXPERT_H
 
-typedef struct {
-    char data[100];
-    char *suivant;
-} premisse;
+
+
+
+typedef struct prop{
+    char data;
+    struct prop *suivant;
+} proposition;
 
 typedef struct {
-    premisse *premisse;
-    char *conclusion;
+    proposition *premisse;
+    char conclusion;
 }regle;
 
-creer_regle(char *premisse, char *conclusion);
+typedef struct {
+    regle *regles;  // Tableau dynamique de règles
+    int taille;     // Nombre de règles dans la base de connaissances
+} BaseDeConnaissances;
+
+
+
+regle *creer_regle();
+proposition *creer_proposition();
 
 #endif //SYSTEM_EXPERT_SYSTEM_EXPERT_H

@@ -1,11 +1,18 @@
 #include <stdio.h>
-import "system_expert.h"
+#include "system_expert.h"
 
-creer_regle(char *premisse, char *conclusion) {
-    regle *r = malloc(sizeof(regle));
-    r->premisse = malloc(sizeof(premisse));
-    r->premisse->data = premisse;
-    r->conclusion = conclusion;
+
+proposition *creer_proposition() {
+    proposition *p = (proposition * ) malloc(sizeof(proposition));
+    p->data = '\0';
+    p->suivant = NULL;
+    return p;
+}
+
+regle *creer_regle() {
+    regle *r = (regle *) malloc(sizeof(regle));
+    r->premisse = NULL;
+    r->conclusion = '\0';
     return r;
 }
 

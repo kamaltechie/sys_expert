@@ -55,8 +55,8 @@ int appartient_a_premisse(proposition *p, char proposition) {
 }
 
 int supprimer_proposition_premisse(proposition **premisse, char proposition) {
-    proposition *current = *premisse;
-    proposition *previous = NULL;
+    ListeProposition current = *premisse;
+    ListeProposition previous = NULL;
 
     while (current != NULL) {
         if (current->data == proposition) {
@@ -78,6 +78,22 @@ int supprimer_proposition_premisse(proposition **premisse, char proposition) {
     }
 
     return 0;  // Proposition not found
+}
+
+int premisse_est_vide(proposition *premisse) {
+    return premisse == NULL;
+}
+
+char acceder_tete_premisse(proposition *premisse) {
+    if (premisse != NULL) {
+        return premisse->data;
+    } else {
+        return '\0';
+    }
+}
+
+char acceder_conclusion_regle(regle *r) {
+    return r->conclusion;
 }
 
 int main() {

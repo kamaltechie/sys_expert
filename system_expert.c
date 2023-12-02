@@ -70,14 +70,14 @@ int supprimer_proposition_premisse(proposition **premisse, char proposition) {
             }
 
             free(current);
-            return 1;  // Proposition removed
+            return 1;
         }
 
         previous = current;
         current = current->suivant;
     }
 
-    return 0;  // Proposition not found
+    return 0;
 }
 
 int premisse_est_vide(proposition *premisse) {
@@ -96,20 +96,16 @@ char acceder_conclusion_regle(regle *r) {
     return r->conclusion;
 }
 
-
-// Créer une base vide
 BC creer_base_vide() {
     return NULL;
 }
 
-// Ajouter une règle à une base
 void ajouter_regle(BC *base, regle *nouvelleRegle) {
     // Créer un nouvel élément pour la règle
     element *nouvelElement = (element *)malloc(sizeof(element));
     nouvelElement->data = nouvelleRegle;
     nouvelElement->suivant = NULL;
 
-    // Si la base est vide, le nouvel élément devient la première
     if (*base == NULL) {
         *base = nouvelElement;
     } else {
@@ -122,7 +118,6 @@ void ajouter_regle(BC *base, regle *nouvelleRegle) {
     }
 }
 
-// Accéder à la règle se trouvant en tête de la base
 regle *acceder_tete_base(BC base) {
     if (base != NULL) {
         return base->data;
@@ -131,7 +126,57 @@ regle *acceder_tete_base(BC base) {
     }
 }
 
-int main() {
+void moteur_inference(BC baseConnaissances, ListeProposition baseFaits) {
 
+    while (baseConnaissances != NULL) {
+
+        proposition *premisse = baseConnaissances->data->premisse;
+        int premisseVraie = 1;
+
+        while (premisse != NULL) {
+            if (!appartient_a_premisse(baseFaits, premisse->data)) {
+
+                premisseVraie = 0;
+                break;
+            }
+            premisse = premisse->suivant;
+        }
+
+        if (premisseVraie) {
+            ajouter_proposition_premisse(baseFaits, baseConnaissances->data->conclusion);
+        }
+        baseConnaissances = baseConnaissances->suivant;
+    }
+}
+
+int main() {
+    // Créer une base de connaissances
+    BC baseConnaissances = creer_base_vide();
+
+    // Créer une règle
+    regle *maRegle = creer_regle();
+    ajouter_proposition_premisse(maRegle, 'A');
+    ajouter_proposition_premisse(maRegle, 'B');
+    ajouter_proposition_premisse(maRegle, 'C');
+    creer_conclusion(maRegle, 'D');
+
+    // Ajouter la règle à la base de connaissances
+    ajouter_regle(&baseConnaissances, maRegle);
+
+    // Créer une base de faits
+    ListeProposition baseFaits = creer_liste_vide();
+
+    // Ajouter des faits à la base de faits
+    ajouter_proposition(&baseFaits, 'A');
+    ajouter_proposition(&baseFaits, 'B');
+
+    // Appliquer le moteur d'inférence
+    moteur_inference(baseConnaissances, baseFaits);
+
+    // Afficher les faits déduits
+    printf("Faits déduits : ");
+    afficher_liste(baseFaits);
+
+    return 0;
 }
 

@@ -10,21 +10,17 @@ typedef struct prop{
 
 typedef proposition *ListeProposition;
 
-// Structure pour une règle
 typedef struct {
-    ListeProposition *premisse;
+    ListeProposition premisse;
     char conclusion;
 } regle;
 
-// Structure pour un élément de la liste (BC)
 typedef struct Elem {
     regle *data;
     struct Elem *suivant;
 } element;
 
 typedef element *BC;
-
-
 
 regle *creer_regle();
 proposition *creer_proposition();

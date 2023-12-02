@@ -96,6 +96,41 @@ char acceder_conclusion_regle(regle *r) {
     return r->conclusion;
 }
 
+
+// Créer une base vide
+BC creer_base_vide() {
+    return NULL;
+}
+
+// Ajouter une règle à une base
+void ajouter_regle(BC *base, regle *nouvelleRegle) {
+    // Créer un nouvel élément pour la règle
+    element *nouvelElement = (element *)malloc(sizeof(element));
+    nouvelElement->data = nouvelleRegle;
+    nouvelElement->suivant = NULL;
+
+    // Si la base est vide, le nouvel élément devient la première
+    if (*base == NULL) {
+        *base = nouvelElement;
+    } else {
+        // Sinon, parcourir la base jusqu'à la fin et ajouter le nouvel élément en queue
+        element *courant = *base;
+        while (courant->suivant != NULL) {
+            courant = courant->suivant;
+        }
+        courant->suivant = nouvelElement;
+    }
+}
+
+// Accéder à la règle se trouvant en tête de la base
+regle *acceder_tete_base(BC base) {
+    if (base != NULL) {
+        return base->data;
+    } else {
+        return NULL;
+    }
+}
+
 int main() {
 
 }

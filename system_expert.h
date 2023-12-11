@@ -39,12 +39,16 @@ int supprimer_proposition_premisse(proposition **premisse, char proposition);
 int premisse_est_vide(proposition *premisse);
 char acceder_tete_premisse(proposition *premisse);
 char acceder_conclusion_regle(regle *r);
+void afficher_base_connaissances(BC base);
+void afficher_base_faits(ListeProposition baseFaits);
+void afficher_regle(regle *r);
+void afficher_premisse(ListeProposition premisse);
 BC creer_base_vide();
 void ajouter_regle(BC *base, regle *nouvelleRegle);
 regle *acceder_tete_base(BC base);
 ListeConclusion ajouter_conclusion_liste(ListeConclusion liste, char conclusion);
 void afficher_liste_conclusions(ListeConclusion liste);
-ListeConclusion moteur_inference(BC baseConnaissances, ListeProposition baseFaits, ListeConclusion listeConclusions);
+ListeConclusion moteur_inference(BC *baseConnaissances, ListeProposition *baseFaits, ListeConclusion listeConclusions);
 
 
 #endif //SYSTEM_EXPERT_SYSTEM_EXPERT_H

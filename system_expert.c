@@ -145,29 +145,60 @@ void afficher_liste_conclusions(ListeConclusion liste) {
     printf("\n");
 }
 
-ListeConclusion moteur_inference(BC baseConnaissances, ListeProposition baseFaits, ListeConclusion listeConclusions) {
+void afficher_base_connaissances(BC base) {
+    printf("Base de connaissances :\n");
+    while (base != NULL) {
+        afficher_regle(base->data);
+        base = base->suivant;
+    }
+    printf("\n");
+}
+
+void afficher_base_faits(ListeProposition baseFaits) {
+    printf("Base de faits :\n");
     while (baseFaits != NULL) {
-        printf("a");
-        BC baseConnaissancesCourante = baseConnaissances;
+        printf("%c ", baseFaits->data);
+        baseFaits = baseFaits->suivant;
+    }
+    printf("\n");
+}
+
+void afficher_regle(regle *r) {
+    printf("Si ");
+    afficher_premisse(r->premisse);
+    printf("Alors %c\n", r->conclusion);
+}
+
+void afficher_premisse(ListeProposition premisse) {
+    while (premisse != NULL) {
+        printf("%c ", premisse->data);
+        premisse = premisse->suivant;
+    }
+}
+
+
+ListeConclusion moteur_inference(BC *baseConnaissances, ListeProposition *baseFaits, ListeConclusion listeConclusions) {
+    int faitsModifies = 1;  // Variable pour suivre les modifications dans les faits
+
+    while (*baseFaits != NULL && faitsModifies) {
+        faitsModifies = 0;  // Initialiser à 0 au début de chaque itération
+
+        BC baseConnaissancesCourante = *baseConnaissances;
 
         while (baseConnaissancesCourante != NULL) {
-            printf("b");
             proposition *premisse = baseConnaissancesCourante->data->premisse;
             int premisseVraie = 1;
 
             while (premisse != NULL) {
-                printf("c");
-                if (!appartient_a_premisse(baseFaits, premisse->data)) {
+                if (!appartient_a_premisse(*baseFaits, premisse->data)) {
                     premisseVraie = 0;
                     break;
                 }
-                printf("d");
                 premisse = premisse->suivant;
             }
-            printf("k");
+
             if (premisseVraie) {
                 // Ajouter la conclusion à la liste de conclusions
-                printf("e");
                 listeConclusions = ajouter_conclusion_liste(listeConclusions, baseConnaissancesCourante->data->conclusion);
 
                 // Ajouter la conclusion à la base de faits
@@ -176,7 +207,10 @@ ListeConclusion moteur_inference(BC baseConnaissances, ListeProposition baseFait
                 // Supprimer les propositions de la prémisse de la base de faits
                 proposition *premisseCourante = baseConnaissancesCourante->data->premisse;
                 while (premisseCourante != NULL) {
-                    supprimer_proposition_premisse(baseFaits, premisseCourante->data);
+                    // Mise à jour de faitsModifies ici
+                    if (supprimer_proposition_premisse(baseFaits, premisseCourante->data)) {
+                        faitsModifies = 1;
+                    }
                     premisseCourante = premisseCourante->suivant;
                 }
             }
@@ -184,8 +218,11 @@ ListeConclusion moteur_inference(BC baseConnaissances, ListeProposition baseFait
             baseConnaissancesCourante = baseConnaissancesCourante->suivant;
         }
     }
+
     return listeConclusions;
 }
+
+
 int main() {
     // Créer une base de connaissances
     BC baseConnaissances = creer_base_vide();
@@ -200,17 +237,21 @@ int main() {
     // Ajouter la règle à la base de connaissances
     ajouter_regle(&baseConnaissances, maRegle);
 
+    afficher_base_connaissances(baseConnaissances);
+
 
     ListeProposition baseFaits = NULL;
     ajouter_proposition_premisse(&baseFaits, 'A');
     ajouter_proposition_premisse(&baseFaits, 'B');
+    ajouter_proposition_premisse(&baseFaits, 'C');
+
+    afficher_base_faits(baseFaits);
 
     // Créer une liste de conclusions
     ListeConclusion listeConclusions = NULL;
-    printf("ffffffffff");
+
     // Appliquer le moteur d'inférence
     listeConclusions=  moteur_inference(baseConnaissances, baseFaits, listeConclusions);
-    printf("dddddddd");
 
     // Afficher les conclusions déduites
     afficher_liste_conclusions(listeConclusions);

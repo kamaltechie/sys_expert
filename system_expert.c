@@ -234,6 +234,8 @@ int main() {
     ajouter_proposition_premisse(maRegle, 'C');
     creer_conclusion(maRegle, 'D');
 
+
+
     // Ajouter la règle à la base de connaissances
     ajouter_regle(&baseConnaissances, maRegle);
 
@@ -251,7 +253,7 @@ int main() {
     ListeConclusion listeConclusions = NULL;
 
     // Appliquer le moteur d'inférence
-    listeConclusions=  moteur_inference(baseConnaissances, baseFaits, listeConclusions);
+    listeConclusions=  moteur_inference(&baseConnaissances, &baseFaits, listeConclusions);
 
     // Afficher les conclusions déduites
     afficher_liste_conclusions(listeConclusions);

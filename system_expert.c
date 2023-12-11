@@ -17,7 +17,7 @@ regle *creer_regle() {
     return r;
 }
 
-ListeProposition ajouter_proposition_premisse(regle *r, char proposition) {
+void ajouter_proposition_premisse(regle *r, char proposition) {
     ListeProposition nouvelleProposition = creer_proposition();
     if (nouvelleProposition != NULL) {
         nouvelleProposition->data = proposition;
@@ -35,7 +35,6 @@ ListeProposition ajouter_proposition_premisse(regle *r, char proposition) {
             courant->suivant = nouvelleProposition;
         }
     }
-    return nouvelleProposition;
 }
 
 void creer_conclusion(regle *r, char conclusion) {
@@ -126,29 +125,67 @@ regle *acceder_tete_base(BC base) {
     }
 }
 
-void moteur_inference(BC baseConnaissances, ListeProposition baseFaits) {
-
-    while (baseConnaissances != NULL) {
-
-        proposition *premisse = baseConnaissances->data->premisse;
-        int premisseVraie = 1;
-
-        while (premisse != NULL) {
-            if (!appartient_a_premisse(baseFaits, premisse->data)) {
-
-                premisseVraie = 0;
-                break;
-            }
-            premisse = premisse->suivant;
-        }
-
-        if (premisseVraie) {
-            ajouter_proposition_premisse(baseFaits, baseConnaissances->data->conclusion);
-        }
-        baseConnaissances = baseConnaissances->suivant;
-    }
+void afficher_conclusion(char conclusion) {
+    printf("Conclusion : %c\n", conclusion);
 }
 
+ListeConclusion ajouter_conclusion_liste(ListeConclusion liste, char conclusion) {
+    elementConclusion *nouvelElement = (elementConclusion *)malloc(sizeof(elementConclusion));
+    nouvelElement->conclusion = conclusion;
+    nouvelElement->suivant = liste;
+    return nouvelElement;
+}
+
+void afficher_liste_conclusions(ListeConclusion liste) {
+    printf("Liste de conclusions : ");
+    while (liste != NULL) {
+        printf("%c ", liste->conclusion);
+        liste = liste->suivant;
+    }
+    printf("\n");
+}
+
+ListeConclusion moteur_inference(BC baseConnaissances, ListeProposition baseFaits, ListeConclusion listeConclusions) {
+    while (baseFaits != NULL) {
+        printf("a");
+        BC baseConnaissancesCourante = baseConnaissances;
+
+        while (baseConnaissancesCourante != NULL) {
+            printf("b");
+            proposition *premisse = baseConnaissancesCourante->data->premisse;
+            int premisseVraie = 1;
+
+            while (premisse != NULL) {
+                printf("c");
+                if (!appartient_a_premisse(baseFaits, premisse->data)) {
+                    premisseVraie = 0;
+                    break;
+                }
+                printf("d");
+                premisse = premisse->suivant;
+            }
+            printf("k");
+            if (premisseVraie) {
+                // Ajouter la conclusion à la liste de conclusions
+                printf("e");
+                listeConclusions = ajouter_conclusion_liste(listeConclusions, baseConnaissancesCourante->data->conclusion);
+
+                // Ajouter la conclusion à la base de faits
+                ajouter_proposition_premisse(baseFaits, baseConnaissancesCourante->data->conclusion);
+
+                // Supprimer les propositions de la prémisse de la base de faits
+                proposition *premisseCourante = baseConnaissancesCourante->data->premisse;
+                while (premisseCourante != NULL) {
+                    supprimer_proposition_premisse(baseFaits, premisseCourante->data);
+                    premisseCourante = premisseCourante->suivant;
+                }
+            }
+
+            baseConnaissancesCourante = baseConnaissancesCourante->suivant;
+        }
+    }
+    return listeConclusions;
+}
 int main() {
     // Créer une base de connaissances
     BC baseConnaissances = creer_base_vide();
@@ -163,19 +200,20 @@ int main() {
     // Ajouter la règle à la base de connaissances
     ajouter_regle(&baseConnaissances, maRegle);
 
-    // Créer une base de faits
-    ListeProposition baseFaits = creer_liste_vide();
 
-    // Ajouter des faits à la base de faits
-    ajouter_proposition(&baseFaits, 'A');
-    ajouter_proposition(&baseFaits, 'B');
+    ListeProposition baseFaits = NULL;
+    ajouter_proposition_premisse(&baseFaits, 'A');
+    ajouter_proposition_premisse(&baseFaits, 'B');
 
+    // Créer une liste de conclusions
+    ListeConclusion listeConclusions = NULL;
+    printf("ffffffffff");
     // Appliquer le moteur d'inférence
-    moteur_inference(baseConnaissances, baseFaits);
+    listeConclusions=  moteur_inference(baseConnaissances, baseFaits, listeConclusions);
+    printf("dddddddd");
 
-    // Afficher les faits déduits
-    printf("Faits déduits : ");
-    afficher_liste(baseFaits);
+    // Afficher les conclusions déduites
+    afficher_liste_conclusions(listeConclusions);
 
     return 0;
 }

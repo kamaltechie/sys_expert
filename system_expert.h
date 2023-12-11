@@ -22,9 +22,17 @@ typedef struct Elem {
 
 typedef element *BC;
 
+typedef struct ElemConclusion {
+    char conclusion;
+    struct ElemConclusion *suivant;
+} elementConclusion;
+
+typedef elementConclusion *ListeConclusion;
+
+
 regle *creer_regle();
 proposition *creer_proposition();
-ListeProposition ajouter_proposition_premisse(regle *r, char proposition);
+void ajouter_proposition_premisse(regle *r, char proposition);
 void creer_conclusion(regle *r, char conclusion);
 int appartient_a_premisse(proposition *p, char proposition);
 int supprimer_proposition_premisse(proposition **premisse, char proposition);
@@ -34,5 +42,9 @@ char acceder_conclusion_regle(regle *r);
 BC creer_base_vide();
 void ajouter_regle(BC *base, regle *nouvelleRegle);
 regle *acceder_tete_base(BC base);
+ListeConclusion ajouter_conclusion_liste(ListeConclusion liste, char conclusion);
+void afficher_liste_conclusions(ListeConclusion liste);
+ListeConclusion moteur_inference(BC baseConnaissances, ListeProposition baseFaits, ListeConclusion listeConclusions);
+
 
 #endif //SYSTEM_EXPERT_SYSTEM_EXPERT_H

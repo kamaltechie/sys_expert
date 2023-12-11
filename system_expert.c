@@ -234,10 +234,15 @@ int main() {
     ajouter_proposition_premisse(maRegle, 'C');
     creer_conclusion(maRegle, 'D');
 
+    regle *maRegle1 = creer_regle();
+    ajouter_proposition_premisse(maRegle1, 'D');
+    creer_conclusion(maRegle1, 'E');
+
 
 
     // Ajouter la règle à la base de connaissances
     ajouter_regle(&baseConnaissances, maRegle);
+    ajouter_regle(&baseConnaissances, maRegle1);
 
     afficher_base_connaissances(baseConnaissances);
 

@@ -25,7 +25,7 @@ int main() {
     afficher_base_connaissances(baseConnaissances);
 
 
-    ListeProposition baseFaits = NULL;
+    Liste baseFaits = NULL;
     ajouter_proposition_premisse(&baseFaits, 'A');
     ajouter_proposition_premisse(&baseFaits, 'B');
     ajouter_proposition_premisse(&baseFaits, 'C');
@@ -33,7 +33,7 @@ int main() {
     afficher_base_faits(baseFaits);
 
     // Créer une liste de conclusions
-    ListeConclusion listeConclusions = NULL;
+    Liste listeConclusions = NULL;
 
     // Appliquer le moteur d'inférence
     listeConclusions=  moteur_inference(&baseConnaissances, &baseFaits, listeConclusions);

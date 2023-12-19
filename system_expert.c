@@ -18,7 +18,7 @@ regle *creer_regle() {
 }
 
 void ajouter_proposition_premisse(regle *r, char proposition) {
-    ListeProposition nouvelleProposition = creer_proposition();
+    Liste nouvelleProposition = creer_proposition();
     if (nouvelleProposition != NULL) {
         nouvelleProposition->data = proposition;
         nouvelleProposition->suivant = NULL;
@@ -28,7 +28,7 @@ void ajouter_proposition_premisse(regle *r, char proposition) {
             r->premisse = nouvelleProposition;
         } else {
             // Sinon, parcourir la liste jusqu'à la fin et ajouter la nouvelle proposition en queue
-            ListeProposition courant = r->premisse;
+            Liste courant = r->premisse;
             while (courant->suivant != NULL) {
                 courant = courant->suivant;
             }
@@ -54,8 +54,8 @@ int appartient_a_premisse(proposition *p, char proposition) {
 }
 
 int supprimer_proposition_premisse(proposition **premisse, char proposition) {
-    ListeProposition current = *premisse;
-    ListeProposition previous = NULL;
+    Liste current = *premisse;
+    Liste previous = NULL;
 
     while (current != NULL) {
         if (current->data == proposition) {
@@ -129,17 +129,17 @@ void afficher_conclusion(char conclusion) {
     printf("Conclusion : %c\n", conclusion);
 }
 
-ListeConclusion ajouter_conclusion_liste(ListeConclusion liste, char conclusion) {
-    elementConclusion *nouvelElement = (elementConclusion *)malloc(sizeof(elementConclusion));
-    nouvelElement->conclusion = conclusion;
+Liste ajouter_conclusion_liste(Liste liste, char conclusion) {
+    proposition *nouvelElement = (proposition *)malloc(sizeof(proposition));
+    nouvelElement->data = conclusion;
     nouvelElement->suivant = liste;
     return nouvelElement;
 }
 
-void afficher_liste_conclusions(ListeConclusion liste) {
+void afficher_liste_conclusions(Liste liste) {
     printf("Liste de conclusions : ");
     while (liste != NULL) {
-        printf("%c ", liste->conclusion);
+        printf("%c ", liste->data);
         liste = liste->suivant;
     }
     printf("\n");
@@ -154,7 +154,7 @@ void afficher_base_connaissances(BC base) {
     printf("\n");
 }
 
-void afficher_base_faits(ListeProposition baseFaits) {
+void afficher_base_faits(Liste baseFaits) {
     printf("Base de faits :\n");
     while (baseFaits != NULL) {
         printf("%c ", baseFaits->data);
@@ -169,7 +169,7 @@ void afficher_regle(regle *r) {
     printf("Alors %c\n", r->conclusion);
 }
 
-void afficher_premisse(ListeProposition premisse) {
+void afficher_premisse(Liste premisse) {
     while (premisse != NULL) {
         printf("%c ", premisse->data);
         premisse = premisse->suivant;
@@ -177,7 +177,7 @@ void afficher_premisse(ListeProposition premisse) {
 }
 
 
-ListeConclusion moteur_inference(BC *baseConnaissances, ListeProposition *baseFaits, ListeConclusion listeConclusions) {
+Liste moteur_inference(BC *baseConnaissances, Liste *baseFaits, Liste listeConclusions) {
     int faitsModifies = 1;  // Variable pour suivre les modifications dans les faits
 
     while (*baseFaits != NULL && faitsModifies) {

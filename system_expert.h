@@ -8,10 +8,10 @@ typedef struct prop{
     struct prop *suivant;
 } proposition;
 
-typedef proposition *ListeProposition;
+typedef proposition *Liste;
 
 typedef struct {
-    ListeProposition premisse;
+    Liste premisse;
     char conclusion;
 } regle;
 
@@ -22,12 +22,7 @@ typedef struct Elem {
 
 typedef element *BC;
 
-typedef struct ElemConclusion {
-    char conclusion;
-    struct ElemConclusion *suivant;
-} elementConclusion;
 
-typedef elementConclusion *ListeConclusion;
 
 
 regle *creer_regle();
@@ -40,15 +35,15 @@ int premisse_est_vide(proposition *premisse);
 char acceder_tete_premisse(proposition *premisse);
 char acceder_conclusion_regle(regle *r);
 void afficher_base_connaissances(BC base);
-void afficher_base_faits(ListeProposition baseFaits);
+void afficher_base_faits(Liste baseFaits);
 void afficher_regle(regle *r);
-void afficher_premisse(ListeProposition premisse);
+void afficher_premisse(Liste premisse);
 BC creer_base_vide();
 void ajouter_regle(BC *base, regle *nouvelleRegle);
 regle *acceder_tete_base(BC base);
-ListeConclusion ajouter_conclusion_liste(ListeConclusion liste, char conclusion);
-void afficher_liste_conclusions(ListeConclusion liste);
-ListeConclusion moteur_inference(BC *baseConnaissances, ListeProposition *baseFaits, ListeConclusion listeConclusions);
+Liste ajouter_conclusion_liste(Liste liste, char conclusion);
+void afficher_liste_conclusions(Liste liste);
+Liste moteur_inference(BC *baseConnaissances, Liste *baseFaits, Liste listeConclusions);
 
 
 #endif //SYSTEM_EXPERT_SYSTEM_EXPERT_H

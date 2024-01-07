@@ -221,5 +221,3 @@ Liste moteur_inference(BC *baseConnaissances, Liste *baseFaits, Liste listeConcl
 
     return listeConclusions;
 }
-
-

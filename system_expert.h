@@ -15,6 +15,7 @@ typedef struct {
     char conclusion;
 } regle;
 
+
 typedef struct Elem {
     regle *data;
     struct Elem *suivant;

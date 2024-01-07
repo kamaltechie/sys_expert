@@ -171,7 +171,12 @@ void afficher_regle(regle *r) {
 
 void afficher_premisse(Liste premisse) {
     while (premisse != NULL) {
-        printf("%c ", premisse->data);
+        if(premisse->suivant!=NULL){
+             printf("%c et ", premisse->data);
+        }else{
+            printf("%c ", premisse->data);
+        }
+       
         premisse = premisse->suivant;
     }
 }
